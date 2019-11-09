@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	namespace一般指定为当前文件的所在包路径+文件名（将来是接口名）
+	在程序中通过[ namespace + id ]定位到执行哪一条SQL语句
+ -->
+<mapper namespace="EmpMapper">
+	<!-- 
+		select、uqdate、delete、insert标签
+	 -->
+	 
+	 <!-- 练习1：查询emp表中的所有员工信息 ,id值不能重复-->	
+	 <select id="findAll" resultType="com.tedu.pojo.Emp"><!-- resultType用于指定将查询到的结果封装到哪个类型中    类的全路径-->
+		select * from emp
+	 </select>
+	 
+	 <update id="insert">
+	 	insert into emp values(null,'张三','高级java开发工程师',25000)
+	 </update>
+	 
+	 <select id="findById" resultType="com.tedu.pojo.Emp">
+	 	select * from emp where name='王海涛'
+	 </select>
+	 
+	 
+	<!--6.  修改emp表中id为8的员工信息
+	name改为马云，job改为教师，salary改为1000, -->
+	
+	 <update id="updateById">
+		update emp set name=#{name},job=#{job},salary=#{salary} where id=#{id}
+	 </update>
+	 
+	 
+	 
+	 <!-- 
+	 * 练习9   ${}占位符
+	 * 动态查询emp表中的所有员工信息
+	 * ，要查询的列是动态传过来的
+	  -->
+	  
+	  <select id="findAll2" resultType="com.tedu.pojo.Emp">
+	  		select ${cols} from emp
+	  </select>
+	  
+	  
+	 <!--  
+	 * 练习10：根据name模糊查询员工信息
+	 * 
+	  -->
+	  <select id="findByName" resultType="com.tedu.pojo.Emp">
+	  	select * from emp where name like '%${name}%'
+	  </select>
+		
+	  
+	<!--   练习11：查询emp表中所有员工的信息 -->
+	<select id="findAll3" resultType="com.tedu.pojo.Emp">
+		select * from emp
+		<where>
+			<if test="minSal!=null">and salary >= #{minSal}</if>
+			<if test="maxSal!=null">and salary <![CDATA[<=]]> #{maxSal}</if>
+		</where>
+	</select>
+	  
+	  
+	<!-- 练习12：修改员工信息   -->
+	<update id="updateById2">
+		update emp
+		<set>
+			<if test="name != null">
+				name=#{name},
+			</if>
+			<if test="job != null">
+				job=#{job},
+			</if>
+			<if test="salary != null">
+				salary=#{salary},
+			</if>
+		</set>
+			where id=#{id}
+	</update>  
+	<update id="deleteByIds">
+		delete from emp where id in
+		<foreach collection="array" open="(" close=")" item="id" separator=",">  <!-- separator 分隔符 -->
+			#{id}
+		</foreach>
+	</update>
+	 
+</mapper>

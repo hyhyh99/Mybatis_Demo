@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	namespace一般指定为当前文件的所在包路径+文件名（将来是接口名）
+	在程序中通过[ namespace + id ]定位到执行哪一条SQL语句
+ -->
+<mapper namespace="com.tedu.dao.EmpMapper">
+	<!-- 
+		select、uqdate、delete、insert标签
+	 -->
+	 
+	 <!-- 练习1：查询emp表中的所有员工信息 ,id值不能重复-->	
+	 <select id="findAll" resultType="com.tedu.pojo.Emp"><!-- resultType用于指定将查询到的结果封装到哪个类型中    类的全路径-->
+		select * from emp
+	 </select>
+	
+	<update id="insert">
+		insert into emp values(null,#{name},#{job},#{salary})
+	</update>
+	
+	<update id="update">
+		update emp set name=#{name1},job=#{job},salary=#{salary} where name=#{name2}
+	</update>
+	
+	<select id="findById" resultType="com.tedu.pojo.Emp">
+		select * from emp where id=#{id}
+	</select>
+	 
+</mapper>
